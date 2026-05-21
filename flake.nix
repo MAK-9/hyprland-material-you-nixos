@@ -76,6 +76,10 @@
             export XDG_DATA_DIRS=./.hypryou/share/hypryou:$XDG_DATA_DIRS
             export PATH=./.hypryou/bin:$PATH
 
+            echo "[build] Patching hardcoded /usr/lib/hypryou in hypryou-start.c"
+            substituteInPlace ./build/hypryou-start.c \
+              --replace '"/usr/lib/hypryou"' "\"$out/lib/hypryou\""
+
             echo "[build] building hypryou/"
             cd ./hypryou
             python utils_cy/setup.py build_ext --build-lib utils_cy --build-temp utils_cy/build
