@@ -13,6 +13,9 @@
           inherit system;
           config.allowUnfree = true;
         };
+        pythonEnv = pkgs.python313.withPackages (ps: with ps; [
+          setuptools cython pygobject3 pillow pycairo python-pam pywayland materialyoucolor
+        ]);
         buildInputs = with pkgs; [
           # Required runtime/build tools
           gcc
@@ -22,15 +25,7 @@
           gtk4
 
           # Python build deps
-          python313
-          python313Packages.setuptools
-          python313Packages.cython
-          python313Packages.pygobject3
-          python313Packages.pillow
-          python313Packages.pycairo
-          python313Packages.python-pam
-          python313Packages.pywayland
-          python313Packages.materialyoucolor
+          pythonEnv
 
           # System deps
           gtk-layer-shell
@@ -133,6 +128,17 @@ COLEOF
             echo "[install] Fixing hardcoded /usr/share/hypryou paths"
             find $out/share/hypryou/configs -name "*.conf" -exec \
               sed -i "s|/usr/share/hypryou|$out/share/hypryou|g" {} \;
+
+            echo "[install] Wrapping hypryou-start to include Python in PATH"
+            mv $out/bin/hypryou-start $out/bin/.hypryou-start-unwrapped
+            cat > $out/bin/hypryou-start << WRAPEOF
+#!/bin/sh
+export PATH="${pythonEnv}/bin:$PATH"
+export GI_TYPELIB_PATH="${pkgs.gtk4}/lib/girepository-1.0:${pkgs.gtk-layer-shell}/lib/girepository-1.0:${pkgs.astal.wireplumber}/lib/girepository-1.0:${pkgs.astal.bluetooth}/lib/girepository-1.0:${pkgs.libnm}/lib/girepository-1.0:${pkgs.upower}/lib/girepository-1.0:\${GI_TYPELIB_PATH:-}"
+export LD_LIBRARY_PATH="${pkgs.gtk4}/lib:${pkgs.gtk-layer-shell}/lib:${pkgs.cairo}/lib:${pkgs.glib}/lib:\${LD_LIBRARY_PATH:-}"
+exec $out/bin/.hypryou-start-unwrapped "\$@"
+WRAPEOF
+            chmod +x $out/bin/hypryou-start
 
             mkdir -p $out/share/wayland-sessions
 
