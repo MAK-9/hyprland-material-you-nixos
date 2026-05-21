@@ -115,6 +115,17 @@
             cp -r .hypryou/* $out/
             rm -rf ./.hypryou/
 
+            echo "[install] Installing default colors-hyprland.conf template"
+            mkdir -p $out/share/hypryou/colors
+            cat > $out/share/hypryou/colors/colors-hyprland.conf << 'COLEOF'
+$primary = rgb(6750A4)
+$onPrimary = rgb(FFFFFF)
+$primaryContainer = rgb(EADDFF)
+$background = rgb(1C1B1F)
+$surface = rgb(1C1B1F)
+$onSurface = rgb(E6E1E5)
+COLEOF
+
             echo "[install] Fixing hardcoded /usr/share/hypryou paths"
             find $out/share/hypryou/configs -name "*.conf" -exec \
               sed -i "s|/usr/share/hypryou|$out/share/hypryou|g" {} \;
