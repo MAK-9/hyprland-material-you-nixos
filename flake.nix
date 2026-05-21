@@ -16,6 +16,14 @@
         pythonEnv = pkgs.python313.withPackages (ps: with ps; [
           setuptools cython pygobject3 pillow pycairo python-pam pywayland materialyoucolor
         ]);
+        giPackages = with pkgs; [
+          gtk4 gtk4-layer-shell graphene glib pango harfbuzz
+          cairo gobject-introspection networkmanager upower
+          astal.wireplumber astal.bluetooth
+          gdk-pixbuf at-spi2-atk libdbusmenu-gtk3
+        ];
+        giTypelibPath = pkgs.lib.makeSearchPathOutput "lib" "lib/girepository-1.0" giPackages;
+        giLibPath = pkgs.lib.makeLibraryPath giPackages;
         buildInputs = with pkgs; [
           # Required runtime/build tools
           gcc
@@ -134,8 +142,8 @@ COLEOF
             cat > $out/bin/hypryou-start << WRAPEOF
 #!/bin/sh
 export PATH="${pythonEnv}/bin:$PATH"
-export GI_TYPELIB_PATH="${pkgs.gtk4}/lib/girepository-1.0:${pkgs.gtk4-layer-shell}/lib/girepository-1.0:${pkgs.astal.wireplumber}/lib/girepository-1.0:${pkgs.astal.bluetooth}/lib/girepository-1.0:${pkgs.networkmanager}/lib/girepository-1.0:${pkgs.upower}/lib/girepository-1.0"
-export LD_LIBRARY_PATH="${pkgs.gtk4}/lib:${pkgs.gtk4-layer-shell}/lib:${pkgs.cairo}/lib:${pkgs.glib}/lib"
+export GI_TYPELIB_PATH="${giTypelibPath}"
+export LD_LIBRARY_PATH="${giLibPath}"
 exec $out/bin/.hypryou-start-unwrapped "''$@"
 WRAPEOF
             chmod +x $out/bin/hypryou-start
