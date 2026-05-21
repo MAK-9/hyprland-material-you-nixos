@@ -139,6 +139,8 @@ class LayerWindow(gtk.ApplicationWindow):
 
     def show(self) -> None:
         super().show()
+        if self.is_popup:
+            self.grab_focus()
         self.on_show()
 
     def destroy(self) -> None:

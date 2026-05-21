@@ -162,6 +162,8 @@ class BrightnessWindow(widget.LayerWindow):
     def on_show(self) -> None:
         self._child = DevicesBox()
         self.set_child(self._child)
+        if self._child.items:
+            self._child.items[1].scale.grab_focus()
 
     def on_hide(self) -> None:
         if self._child:
