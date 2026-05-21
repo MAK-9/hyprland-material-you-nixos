@@ -115,6 +115,10 @@
             cp -r .hypryou/* $out/
             rm -rf ./.hypryou/
 
+            echo "[install] Fixing hardcoded /usr/share/hypryou paths"
+            find $out/share/hypryou/configs -name "*.conf" -exec \
+              sed -i "s|/usr/share/hypryou|$out/share/hypryou|g" {} \;
+
             mkdir -p $out/share/wayland-sessions
 
             echo "${hypryouSession}" > $out/share/wayland-sessions/hypryou.desktop
