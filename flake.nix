@@ -134,9 +134,9 @@ COLEOF
             cat > $out/bin/hypryou-start << WRAPEOF
 #!/bin/sh
 export PATH="${pythonEnv}/bin:$PATH"
-export GI_TYPELIB_PATH="${pkgs.gtk4}/lib/girepository-1.0:${pkgs.gtk-layer-shell}/lib/girepository-1.0:${pkgs.astal.wireplumber}/lib/girepository-1.0:${pkgs.astal.bluetooth}/lib/girepository-1.0:${pkgs.libnm}/lib/girepository-1.0:${pkgs.upower}/lib/girepository-1.0:\${GI_TYPELIB_PATH:-}"
-export LD_LIBRARY_PATH="${pkgs.gtk4}/lib:${pkgs.gtk-layer-shell}/lib:${pkgs.cairo}/lib:${pkgs.glib}/lib:\${LD_LIBRARY_PATH:-}"
-exec $out/bin/.hypryou-start-unwrapped "\$@"
+export GI_TYPELIB_PATH="${pkgs.gtk4}/lib/girepository-1.0:${pkgs.gtk-layer-shell}/lib/girepository-1.0:${pkgs.astal.wireplumber}/lib/girepository-1.0:${pkgs.astal.bluetooth}/lib/girepository-1.0:${pkgs.libnm}/lib/girepository-1.0:${pkgs.upower}/lib/girepository-1.0"
+export LD_LIBRARY_PATH="${pkgs.gtk4}/lib:${pkgs.gtk-layer-shell}/lib:${pkgs.cairo}/lib:${pkgs.glib}/lib"
+exec $out/bin/.hypryou-start-unwrapped "''$@"
 WRAPEOF
             chmod +x $out/bin/hypryou-start
 
