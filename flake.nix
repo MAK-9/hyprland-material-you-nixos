@@ -145,11 +145,11 @@ COLEOF
             mv $out/bin/hypryou-start $out/bin/.hypryou-start-unwrapped
             cat > $out/bin/hypryou-start << WRAPEOF
 #!/bin/sh
-export PATH="${pythonEnv}/bin:$PATH"
+export PATH="${pythonEnv}/bin:\$PATH"
 export GI_TYPELIB_PATH="${giTypelibPath}"
 export LD_LIBRARY_PATH="${giLibPath}"
-export XDG_DATA_DIRS="/run/current-system/sw/share:$HOME/.nix-profile/share:/usr/local/share:/usr/share"
-exec $out/bin/.hypryou-start-unwrapped "''$@"
+export XDG_DATA_DIRS="/run/current-system/sw/share:\$HOME/.nix-profile/share:/usr/local/share:/usr/share"
+exec $out/bin/.hypryou-start-unwrapped "\$@"
 WRAPEOF
             chmod +x $out/bin/hypryou-start
 
