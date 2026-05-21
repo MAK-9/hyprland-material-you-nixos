@@ -133,9 +133,13 @@ $surface = rgb(1C1B1F)
 $onSurface = rgb(E6E1E5)
 COLEOF
 
-            echo "[install] Fixing hardcoded /usr/share/hypryou paths"
+            echo "[install] Fixing hardcoded /usr/share/hypryou and /usr/lib/hypryou paths"
             find $out/share/hypryou/configs -name "*.conf" -exec \
               sed -i "s|/usr/share/hypryou|$out/share/hypryou|g" {} \;
+            find $out/lib/hypryou -name "*.py" -exec \
+              sed -i "s|/usr/share/hypryou|$out/share/hypryou|g" {} \;
+            find $out/lib/hypryou -name "*.py" -exec \
+              sed -i "s|/usr/lib/hypryou|$out/lib/hypryou|g" {} \;
 
             echo "[install] Wrapping hypryou-start to include Python in PATH"
             mv $out/bin/hypryou-start $out/bin/.hypryou-start-unwrapped
